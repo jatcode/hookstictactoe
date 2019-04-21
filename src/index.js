@@ -13,10 +13,18 @@ function Square({ value, onClick}) {
 
 function Board() {
   const [squares, setSquares] = useState(Array(9).fill(null))
-
+  const [isXnext, setIsXnext] = useState(true)
+  const [gameOver, setGameOver] = useState(false)
+  
   const handleClick = (i)=>{
-    let nextSquares = [...squares]
-    nextSquares[i]= 'x' 
+    console.log(`isXnext: ${isXnext}`)
+    let nextSquares
+    nextSquares = [...squares]
+    if(calculateWinner(squares) || squares[i]){
+      return
+    }
+    nextSquares[i] = isXnext ? 'x' : 'o' 
+    setIsXnext(!isXnext)
     setSquares(nextSquares)
   }
 
@@ -24,7 +32,13 @@ function Board() {
     return <Square value={squares[i]}  onClick={()=>{handleClick(i)}} />;
   }
 
-    const status = 'Next player: X';
+  const winner = calculateWinner(squares)
+  let status
+  if(winner) {
+    status = `Winner: ${winner}`
+  }else {
+    status = `Next player: ${isXnext ? 'X' : 'O'}`;
+  }
 
   return (
     <div>
@@ -70,3 +84,25 @@ ReactDOM.render(
   <Game />,
   document.getElementById('root')
 );
+
+//helper function
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+//helper function
