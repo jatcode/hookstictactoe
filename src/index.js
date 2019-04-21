@@ -2,24 +2,26 @@ import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-function Square({ number, squares}) {
-  const [value, setValue ] = useState(number)
-  const handleClick = (e)=>{
-    setValue('X');
-  }
+function Square({ value, onClick}) {
+
   return (
-    <button className="square" onClick={handleClick}>
-      {squares[value]}
+    <button className="square" onClick={onClick}>
+      {value}
     </button>
   );
 }
 
-
 function Board() {
   const [squares, setSquares] = useState(Array(9).fill(null))
 
+  const handleClick = (i)=>{
+    let nextSquares = [...squares]
+    nextSquares[i]= 'x' 
+    setSquares(nextSquares)
+  }
+
   const renderSquare =(i)=> {
-    return <Square number={i} squares={squares} />;
+    return <Square value={squares[i]}  onClick={()=>{handleClick(i)}} />;
   }
 
     const status = 'Next player: X';
