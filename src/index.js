@@ -13,11 +13,30 @@ function Square({ value, onClick}) {
 
 function Board() {
   const [squares, setSquares] = useState(Array(9).fill(null))
-
+  const [isXnext, setIsXnext] = useState(true)
+  const [gameOver, setGameOver] = useState(false)
+  const [clicks, setClicks] = useState(0)
+  
   const handleClick = (i)=>{
-    let nextSquares = [...squares]
-    nextSquares[i]= 'x' 
-    setSquares(nextSquares)
+    if (clicks === 9 ){
+      setSquares(Array(9).fill(null))
+      setIsXnext(true)
+      setClicks(0)
+      console.log('gameOver BABY!!!!: ')
+    }
+    console.log(isXnext)
+    let nextSquares
+    setClicks(clicks+ 1)
+    setIsXnext(!isXnext)
+    console.log('clicks: ', clicks,'isXnext', isXnext)
+    if (clicks > 8 ){
+      setGameOver(true)
+      console.log('gameOver: ', gameOver)
+    }else{
+      nextSquares = [...squares]
+      isXnext ? nextSquares[i] = 'x' : nextSquares[i] = 'o' 
+      setSquares(nextSquares)
+    }
   }
 
   const renderSquare =(i)=> {
